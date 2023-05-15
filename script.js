@@ -1,19 +1,17 @@
 const imageContainer = document.getElementById("image-container");
 const loader = document.getElementById("loader");
 
-let photosArray = []; //variable is 'let' because the photos are going to change. GLOBAL VARIABLE
+let photosArray = []; //variable is 'let' because the photos are going to change. GLOBAL VARIABLE empty
 
 // API Url
 const count = 10;
 const apiKey = "GefjiXPZAd7tRdKL47hGwljvurKEvWBEvVRnlaPSQro";
-const apiUrl = `https://api.unsplash.com/photos/random?client_id=${apiKey}&count=${count}`;
+const apiUrl = `https://api.unsplash.com/photos/random?client_id=${apiKey}&count=${count}&`;
 
-// // Helper function to set Attributes like title, html on DOM Elements
-// function setAttributes(element,attributes) {
-//     for (const key in attributes) {
-//      element.setAttribute(key, attributes[key]);
-//     }
-// }
+//Targets for the API
+// alt_description;
+// links.html;
+// urls.regular;
 
 //Create html Element for Links and Photos, add to DOM
 function displayPhotos() {
@@ -21,7 +19,7 @@ function displayPhotos() {
   photosArray.forEach((photo) => {
     //create <a> element to link to Unsplash using createElement
     const item = document.createElement("a");
-    //setting attributes and values for the html element created using setAttribute
+    //setting attributes and values for the html element <a> created using setAttribute
     item.setAttribute("href", photo.links.html);
     item.setAttribute("target", "_blank");
     //create <img> element for each photo
@@ -47,10 +45,16 @@ async function getPhotos() {
   }
 }
 
-//Targets for the API
-// alt_description;
-// links.html;
-// urls.regular;
+//Implementing the endless scroll
+//syntax variable.addEventListener( 'the event to target eg click' , the function);
+window.addEventListener("scroll", () => {
+  if (
+    window.innerHeight + window.scrollY >=
+    document.body.offsetHeight - 1000
+  ) {
+    getPhotos();
+  }
+});
 
 //On Load to run the function
 getPhotos();
