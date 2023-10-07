@@ -1,34 +1,38 @@
 const imageContainer = document.getElementById("image-container");
 const loader = document.getElementById("loader");
 
-let photosArray = []; //variable is 'let' because the photos are going to change. GLOBAL VARIABLE empty
-
-// API Url
-const count = 10;
+const imageCountToLoad = 10;
 const apiKey = "GefjiXPZAd7tRdKL47hGwljvurKEvWBEvVRnlaPSQro";
-const apiUrl = `https://api.unsplash.com/photos/random?client_id=${apiKey}&count=${count}&`;
+const apiUrl = `https://api.unsplash.com/photos/random?client_id=${apiKey}&count=${imageCountToLoad}&`;
 
-//Targets for the API
-// alt_description;
-// links.html;
-// urls.regular;
+let photosArray = [];
+let ready = false;
+let imagesLoaded = 0;
+let totalImages = 0;
 
-//Create html Element for Links and Photos, add to DOM
+function imageLoaded() {
+  imagesLoaded++;
+  if (imagesLoaded === totalImages) {
+    ready = true;
+    loader.hidden = true;
+  }
+}
+
 function displayPhotos() {
-  //Run function for each object in photosArray
+  imagesLoaded = 0;
+  totalImages = photosArray.length;
   photosArray.forEach((photo) => {
-    //create <a> element to link to Unsplash using createElement
+    console.log(photo);
     const anchor = document.createElement("a");
-    //setting attributes and values for the html element <a> created using setAttribute
     anchor.setAttribute("href", photo.links.html);
     anchor.setAttribute("target", "_blank");
-    //create <img> element for each photo
+
     const img = document.createElement("img");
-    //setting the atrribute and values for the html created
     img.setAttribute("src", photo.urls.regular);
     img.setAttribute("alt", photo.alt_description);
     img.setAttribute("title", photo.alt_description);
-    // putting <img> inside <a> element, and then putting both inside the ImageContainer variable using appendChild
+    img.addEventListener("load", imageLoaded);
+
     anchor.appendChild(img);
     imageContainer.appendChild(anchor);
   });
@@ -40,22 +44,19 @@ async function getPhotos() {
     const response = await fetch(apiUrl);
     photosArray = await response.json();
     displayPhotos();
-  } catch (error) {
-    //Catch error
-  }
+  } catch {}
 }
 
 //Implementing the endless scroll
-//syntax variable.addEventListener( 'the event to target eg click' , the function);
 window.addEventListener("scroll", () => {
   if (
-    window.innerHeight + window.scrollY >=
-    document.body.offsetHeight - 1000
+    window.innerHeight + window.scrollY >= document.body.offsetHeight - 1000 &&
+    ready
     /*innerHeight = height of the display , scrollY = height from top of page till current scrolling, offsetHeight = height of everything in the body (including was is not on the view)*/
   ) {
+    ready = false;
     getPhotos();
   }
 });
 
-//On Load to run the function
 getPhotos();
