@@ -18,10 +18,10 @@ function displayPhotos() {
   //Run function for each object in photosArray
   photosArray.forEach((photo) => {
     //create <a> element to link to Unsplash using createElement
-    const item = document.createElement("a");
+    const anchor = document.createElement("a");
     //setting attributes and values for the html element <a> created using setAttribute
-    item.setAttribute("href", photo.links.html);
-    item.setAttribute("target", "_blank");
+    anchor.setAttribute("href", photo.links.html);
+    anchor.setAttribute("target", "_blank");
     //create <img> element for each photo
     const img = document.createElement("img");
     //setting the atrribute and values for the html created
@@ -29,8 +29,8 @@ function displayPhotos() {
     img.setAttribute("alt", photo.alt_description);
     img.setAttribute("title", photo.alt_description);
     // putting <img> inside <a> element, and then putting both inside the ImageContainer variable using appendChild
-    item.appendChild(img);
-    imageContainer.appendChild(item);
+    anchor.appendChild(img);
+    imageContainer.appendChild(anchor);
   });
 }
 
@@ -51,6 +51,7 @@ window.addEventListener("scroll", () => {
   if (
     window.innerHeight + window.scrollY >=
     document.body.offsetHeight - 1000
+    /*innerHeight = height of the display , scrollY = height from top of page till current scrolling, offsetHeight = height of everything in the body (including was is not on the view)*/
   ) {
     getPhotos();
   }
