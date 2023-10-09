@@ -31,6 +31,7 @@ function displayPhotos() {
     img.setAttribute("src", photo.urls.regular);
     img.setAttribute("alt", photo.alt_description);
     img.setAttribute("title", photo.alt_description);
+
     img.addEventListener("load", imageLoaded);
 
     anchor.appendChild(img);
@@ -52,7 +53,6 @@ window.addEventListener("scroll", () => {
   if (
     window.innerHeight + window.scrollY >= document.body.offsetHeight - 1000 &&
     ready
-    /*innerHeight = height of the display , scrollY = height from top of page till current scrolling, offsetHeight = height of everything in the body (including was is not on the view)*/
   ) {
     ready = false;
     getPhotos();
